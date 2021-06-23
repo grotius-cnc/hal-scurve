@@ -1,0 +1,176 @@
+component scurve "scurve component";
+
+description 
+"""
+Scurve Component
+
+Compile slogan :
+/opt/linuxcnc/bin/halcompile --compile /opt/linuxcnc/src/hal/components/scurve.comp
+
+Preprocess slogan :
+/opt/linuxcnc/bin/halcompile --preprocess /opt/linuxcnc/src/hal/components/scurve.comp
+
+Then copy it to the rtlib.
+
+Then in halview : loadrt scurve
+
+Usage :
+
+setp scurve.pahtlenght 100
+setp scurve.vo 0
+setp scurve.ve 0
+setp scurve.vs 5
+setp scurve.acc-linear 2
+setp scurve.dcc-linear 2
+setp scurve.verbose 1
+setp scurve.time-interval 0.001 // servo-thread time
+
+And then enable :
+setp scurve.enable 1
+
+""";
+ 
+author "Skynet 2021";
+
+license "GPLv2 or greater";
+
+option singleton yes;
+
+pin out bit values_ok		"a check if mimimal required values are given (pathlenght, acc_lineair, dcc_lineair, time_interval)";
+pin in bit demo_mode		"sets the timestamp +1ms and loops the scurve";
+
+pin in float pathlenght		"path lenght in mm";
+pin in float vs 			"max velocity";
+pin in float vo 			"start velocity or initial velocity";
+pin in float ve 			"end velocity";
+
+pin in float acc_lineair 	"lineair acceleration, mm/sec^2, acceleration stage";
+pin in float acc_begin 	    "initial acceleration, used in concave period only, exotic function";
+
+pin in float dcc_lineair 	"lineair de-acceleration, mm/sec^2, de-acceleration stage, this value may be higher then Acc_linear";
+pin in float dcc_end	    "end acceleration, used in concave period only, exotic function";
+
+pin in float time_interval  "the resolution of the timer, standard=0.001=1ms";
+
+pin in float time_stamp		"request scurve values (velocity, acceleration, etc) at a certain timestamp";
+
+pin in bit verbose			"verbose output 0 or 1";
+
+// Scurve output pins.
+// Calculated time:
+pin out float t1			"acceleration time";
+pin out float t2			"atspeed time, steady stage";
+pin out float t3			"de-acceleration time";
+pin out float ttot			"total time of path (T1+T2+T3)";
+
+// Calculated distance:
+pin out float l1			"acceleration lenght";
+pin out float l2			"atspeed lenght, steady stage";
+pin out float l3			"de-acceleration lenght";
+pin out float ltot			"total path lenght (L1+L2+L3)";
+
+// Information about displacement(s) values:
+pin out float acc_concave  "displacement convave period acc, curve up, document page 1";
+pin out float acc_convex   "displacement convex period acc, curve down";
+pin out float acc          "displacement acc period, s_acc_concave + s_acc_convex";
+pin out float steady       "displacement atspeed/steady period";
+pin out float dcc_convex   "displacement convex period dcc, curve down. (one position for last curve segment)";
+pin out float dcc_concave  "displacement convave period dcc, curve up. (last curve segment)";
+pin out float dcc          "dispalcement dcc period, s_dcc_convex + s_dcc_concave";
+
+// Timestamp request(r) results:
+pin out float r_displacment   	"displacement(s) of the scurve in mm";
+pin out float r_velocity		"velocity";
+pin out float r_acceleration  	"acceleration"; 
+pin out float r_jerk			"jerk";
+
+function _;
+
+;;
+
+#include "rtapi_math.h"
+#include "scurve.h"
+
+double ms;
+double seconds;
+double totalnsec;
+
+FUNCTION(_) {
+
+    // Scurve traject.
+    if(!demo_mode && pathlenght>0 && vs>0 && acc_lineair>0 && dcc_lineair<0){   // Check if we have at least the minimal required values.
+        values_ok=true;
+        struct result r;                                    // Structure that holds the results.
+        r=request_trajectcalculator_scurve(vs,			 	// velmax.
+                                           acc_lineair,     // accmax.
+                                           dcc_lineair,     // dccmax.
+                                           acc_begin,       // accbegin.
+                                           dcc_end,         // dccend.
+                                           vo, 				// vbegin.
+                                           ve, 				// vend.
+                                           pathlenght,      // pathlenght.
+                                           time_stamp,      // request at time(t) in sec.
+                                           verbose);        // debug 0 or 1.
+
+        // Copy the results(r) to hal float output pins.
+        r_displacment=r.s;
+        r_velocity=r.v;
+        r_acceleration=r.a;
+        r_jerk=r.j;
+    } else {
+        values_ok=false;
+    }
+
+    // Scurve traject demo. Check output with halscope.
+    if(demo_mode){  
+        // Demo timer.
+        totalnsec = totalnsec + period;
+        ms = totalnsec * 0.000001;          // rtapi_print_msg(RTAPI_MSG_ERR,"totalms: %f \n", totalms);
+        seconds = totalnsec * 0.000000001;  // rtapi_print_msg(RTAPI_MSG_ERR,"totalseconds: %f \n", totalseconds);
+        
+        struct result r;                                    // Structure that holds the results.
+        r=request_trajectcalculator_scurve(5,			 	// velmax.
+                                           2,               // accmax.
+                                           3,               // dccmax.
+                                           0,               // accbegin.
+                                           0,               // dccend.
+                                           1, 				// vbegin.
+                                           0, 				// vend.
+                                           50,              // pathlenght.
+                                           seconds,         // request at time(t) in sec.
+                                           1);              // debug 0 or 1.  
+
+        // Copy the results to hal float output pins.
+        r_displacment=r.s;
+        r_velocity=r.v;
+        r_acceleration=r.a;
+        r_jerk=r.j;
+
+        if(seconds>=r.t){ // Scurve completed, reset time.
+            totalnsec=0;
+            seconds=0;
+            ms=0;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

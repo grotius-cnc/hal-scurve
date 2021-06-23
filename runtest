@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Qt -> Projects -> Build & Run -> Executable -> /home/user/Desktop/Linux-Embedded/linux-hal/halcompile-qt-test/runtest
+
+HAL_TOP_DIR="/opt/linuxcnc"
+COMP_SO_DIR="/home/user/Desktop/Linux-Embedded/linux-hal/halcompile-scurve"
+
+cp -rf $COMP_SO_DIR/scurve.so $HAL_TOP_DIR/rtlib/
+
+cd $HAL_TOP_DIR/scripts && . ./rip-environment
+#cd $HAL_TOP_DIR/bin
+	# Load rt component:
+	halcmd loadrt threads name1=base-thread fp1=0 period1=25000 name2=servo-thread period2=1000000
+ 	halcmd loadrt scurve
+ 	halcmd addf scurve servo-thread
+ 	#halcmd setp test.bit-in true
+ 	halcmd start
+
+ 	# Start hal programs to debug:
+	#halmeter
+	#halshow
+	halscope 
+	
+	# Unload rt components and clean up hal:
+	halrun -U
+
+
+
