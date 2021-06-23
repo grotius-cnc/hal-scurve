@@ -53,33 +53,12 @@ pin in float time_stamp		"request scurve values (velocity, acceleration, etc) at
 
 pin in bit verbose			"verbose output 0 or 1";
 
-// Scurve output pins.
-// Calculated time:
-pin out float t1			"acceleration time";
-pin out float t2			"atspeed time, steady stage";
-pin out float t3			"de-acceleration time";
-pin out float ttot			"total time of path (T1+T2+T3)";
-
-// Calculated distance:
-pin out float l1			"acceleration lenght";
-pin out float l2			"atspeed lenght, steady stage";
-pin out float l3			"de-acceleration lenght";
-pin out float ltot			"total path lenght (L1+L2+L3)";
-
-// Information about displacement(s) values:
-pin out float acc_concave  "displacement convave period acc, curve up, document page 1";
-pin out float acc_convex   "displacement convex period acc, curve down";
-pin out float acc          "displacement acc period, s_acc_concave + s_acc_convex";
-pin out float steady       "displacement atspeed/steady period";
-pin out float dcc_convex   "displacement convex period dcc, curve down. (one position for last curve segment)";
-pin out float dcc_concave  "displacement convave period dcc, curve up. (last curve segment)";
-pin out float dcc          "dispalcement dcc period, s_dcc_convex + s_dcc_concave";
-
 // Timestamp request(r) results:
 pin out float r_displacment   	"displacement(s) of the scurve in mm";
 pin out float r_velocity		"velocity";
 pin out float r_acceleration  	"acceleration"; 
 pin out float r_jerk			"jerk";
+pin out float r_trajecttime		"total traject time of scurve";
 
 function _;
 
@@ -98,13 +77,13 @@ FUNCTION(_) {
     if(!demo_mode && pathlenght>0 && vs>0 && acc_lineair>0 && dcc_lineair>0){   // Check if we have at least the minimal required values.
         values_ok=true;
         struct result r;                                    // Structure that holds the results.
-        r=request_trajectcalculator_scurve(vs,			 	         // velmax.
+        r=request_trajectcalculator_scurve(vs,			 	// velmax.
                                            acc_lineair,     // accmax.
                                            dcc_lineair,     // dccmax.
                                            acc_begin,       // accbegin.
                                            dcc_end,         // dccend.
-                                           vo, 				         // vbegin.
-                                           ve, 			         	// vend.
+                                           vo, 				// vbegin.
+                                           ve, 				// vend.
                                            pathlenght,      // pathlenght.
                                            time_stamp,      // request at time(t) in sec.
                                            verbose);        // debug 0 or 1.
@@ -114,6 +93,8 @@ FUNCTION(_) {
         r_velocity=r.v;
         r_acceleration=r.a;
         r_jerk=r.j;
+        r_trajecttime=r.t;
+
     } else {
         values_ok=false;
     }
@@ -126,13 +107,13 @@ FUNCTION(_) {
         seconds = totalnsec * 0.000000001;  // rtapi_print_msg(RTAPI_MSG_ERR,"totalseconds: %f \n", totalseconds);
         
         struct result r;                                    // Structure that holds the results.
-        r=request_trajectcalculator_scurve(5,			 	          // velmax.
+        r=request_trajectcalculator_scurve(5,			 	// velmax.
                                            2,               // accmax.
                                            3,               // dccmax.
                                            0,               // accbegin.
                                            0,               // dccend.
-                                           1, 				          // vbegin.
-                                           0, 				          // vend.
+                                           1, 				// vbegin.
+                                           0, 				// vend.
                                            50,              // pathlenght.
                                            seconds,         // request at time(t) in sec.
                                            1);              // debug 0 or 1.  
