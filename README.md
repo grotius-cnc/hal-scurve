@@ -63,28 +63,14 @@ Return values at a certain time_stamp (seconds):
 	pin out float r_velocit			// velocity.
 	pin out float r_acceleration  	    	// acceleration.
 	pin out float r_jerk			// jerk
+	pin out float r_trajecttime		// total traject time of scurve.
 ```
-Calculated time:
-```
-	pin out float t1			// acceleration time.
-	pin out float t2			// atspeed time, steady stage.
-	pin out float t3			// de-acceleration time.
-	pin out float ttot			// total time of path (T1+T2+T3).
-```
-Calculated distance:
-```
-	pin out float l1			// acceleration lenght.
-	pin out float l2			// atspeed lenght, steady stage.
-	pin out float l3			// de-acceleration lenght.
-	pin out float ltot			// total path lenght (L1+L2+L3).
-```
-Information about displacement(s) values:
-```
-	pin out float acc_concave  		// displacement convave period acc, curve up, document page 1.
-	pin out float acc_convex   		// displacement convex period acc, curve down.
-	pin out float acc           		// displacement acc period, s_acc_concave + s_acc_convex.
-	pin out float steady       		// displacement atspeed/steady period.
-	pin out float dcc_convex   		// displacement convex period dcc, curve down. (one position for last curve segment).
-	pin out float dcc_concave  		// displacement convave period dcc, curve up. (last curve segment).
-	pin out float dcc          		// dispalcement dcc period, s_dcc_convex + s_dcc_concave".
-```
+
+Implementation tip:
+If you perform a scurve request with scurve.time-stamp=0. You get the hal pin value for: r_trajecttime (scurve traject time).
+Then your "scurve.time-stamp" request can be done for the period : 0 >= scurve.time-stamp <= r_trajecttime 
+
+
+
+
+
