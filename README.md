@@ -13,7 +13,7 @@ This c file can be used by qt to edit.
 
 The scurve.c file can be compiled into a kernel module directly, use "halcompile --compile scurve.c".
 
-The "runtest" is a file that is used by qt when compiling is done, it start the application. 
+The "runtest" is a file that is used by qt when compiling is done, it load's the component, starts a oscilloscope etc. Easy for testing.
 
 Quickstart surve in demo-mode:
 ```
