@@ -16,7 +16,7 @@ The scurve.c file can be compiled into a kernel module directly, use "halcompile
 The "runtest" is a file that is used by qt when compiling is done, it start the application. 
 
 Quickstart surve in demo-mode:
-  ```
+```
   sudo halcompile --install scurve.comp  ( --compile, --preprocess )
 	halcmd loadrt threads name1=base-thread fp1=0 period1=25000 name2=servo-thread period2=1000000
  	halcmd loadrt scurve
@@ -25,10 +25,9 @@ Quickstart surve in demo-mode:
  	halcmd start
 	halscope    (oscilloscope program)
 	halrun -U   (clean up hal)
-  ```
-  
+``` 
 Quickstart surve with parameter input:
-  ```
+```
 	sudo halcompile --install scurve.comp  ( --compile, --preprocess )
 	halcmd loadrt threads name1=base-thread fp1=0 period1=25000 name2=servo-thread period2=1000000
 	halcmd loadrt scurve
@@ -55,34 +54,32 @@ Quickstart surve with parameter input:
 	halscope    (oscilloscope program)
 	halmeter    (program to set and view hal pins)
 	halrun -U   (exit, clean up hal)
-  ```
-
+```
 Scurve outputs.
 
-Return values at a certain time_stamp (seconds) :
-	```
+Return values at a certain time_stamp (seconds):
+```
 	pin out float r_displacment   	    	// displacement(s) of the scurve in mm.
 	pin out float r_velocit			// velocity.
 	pin out float r_acceleration  	    	// acceleration.
 	pin out float r_jerk			// jerk
-	```
+```
 Calculated time:
-	```
+```
 	pin out float t1			// acceleration time.
 	pin out float t2			// atspeed time, steady stage.
 	pin out float t3			// de-acceleration time.
 	pin out float ttot			// total time of path (T1+T2+T3).
-	```
+```
 Calculated distance:
-	```
+```
 	pin out float l1			// acceleration lenght.
 	pin out float l2			// atspeed lenght, steady stage.
 	pin out float l3			// de-acceleration lenght.
 	pin out float ltot			// total path lenght (L1+L2+L3).
-	```
+```
 Information about displacement(s) values:
-
-	```
+```
 	pin out float acc_concave  		// displacement convave period acc, curve up, document page 1.
 	pin out float acc_convex   		// displacement convex period acc, curve down.
 	pin out float acc           		// displacement acc period, s_acc_concave + s_acc_convex.
@@ -90,4 +87,4 @@ Information about displacement(s) values:
 	pin out float dcc_convex   		// displacement convex period dcc, curve down. (one position for last curve segment).
 	pin out float dcc_concave  		// displacement convave period dcc, curve up. (last curve segment).
 	pin out float dcc          		// dispalcement dcc period, s_dcc_convex + s_dcc_concave".
-	```
+```
