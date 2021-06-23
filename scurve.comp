@@ -98,13 +98,13 @@ FUNCTION(_) {
     if(!demo_mode && pathlenght>0 && vs>0 && acc_lineair>0 && dcc_lineair<0){   // Check if we have at least the minimal required values.
         values_ok=true;
         struct result r;                                    // Structure that holds the results.
-        r=request_trajectcalculator_scurve(vs,			 	// velmax.
+        r=request_trajectcalculator_scurve(vs,			 	         // velmax.
                                            acc_lineair,     // accmax.
                                            dcc_lineair,     // dccmax.
                                            acc_begin,       // accbegin.
                                            dcc_end,         // dccend.
-                                           vo, 				// vbegin.
-                                           ve, 				// vend.
+                                           vo, 				         // vbegin.
+                                           ve, 			         	// vend.
                                            pathlenght,      // pathlenght.
                                            time_stamp,      // request at time(t) in sec.
                                            verbose);        // debug 0 or 1.
@@ -126,13 +126,13 @@ FUNCTION(_) {
         seconds = totalnsec * 0.000000001;  // rtapi_print_msg(RTAPI_MSG_ERR,"totalseconds: %f \n", totalseconds);
         
         struct result r;                                    // Structure that holds the results.
-        r=request_trajectcalculator_scurve(5,			 	// velmax.
+        r=request_trajectcalculator_scurve(5,			 	          // velmax.
                                            2,               // accmax.
                                            3,               // dccmax.
                                            0,               // accbegin.
                                            0,               // dccend.
-                                           1, 				// vbegin.
-                                           0, 				// vend.
+                                           1, 				          // vbegin.
+                                           0, 				          // vend.
                                            50,              // pathlenght.
                                            seconds,         // request at time(t) in sec.
                                            1);              // debug 0 or 1.  
