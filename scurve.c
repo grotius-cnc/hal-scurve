@@ -313,7 +313,7 @@ double totalnsec;
 FUNCTION(_) {
 
     // Scurve traject.
-    if(!demo_mode && pathlenght>0 && vs>0 && acc_lineair>0 && dcc_lineair<0){   // Check if we have at least the minimal required values.
+    if(!demo_mode && pathlenght>0 && vs>0 && acc_lineair>0 && dcc_lineair>0){   // Check if we have at least the minimal required values.
         values_ok=true;
         struct result r;                                    // Structure that holds the results.
         r=request_trajectcalculator_scurve(vs,			 	// velmax.
