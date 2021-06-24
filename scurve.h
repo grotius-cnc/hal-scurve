@@ -515,7 +515,7 @@ struct result request(struct traject tr, double timestamp){
         r=request_acc_period(tr);
         return r;
     }
-    if(timestamp>tr.T1 && timestamp<(tr.T1+tr.T2)){
+    if(timestamp>tr.T1 && timestamp<=(tr.T1+tr.T2)){
         // Steady period
         r=request_steady_period(tr,timestamp);
         return r;
@@ -525,7 +525,7 @@ struct result request(struct traject tr, double timestamp){
         r=request_steady_period(tr,timestamp);
         return r;
     }
-    if(timestamp>tr.T1+tr.T2 && timestamp<(tr.T1+tr.T2+(tr.T3/2))){
+    if(timestamp>tr.T1+tr.T2 && timestamp<=(tr.T1+tr.T2+(tr.T3/2))){
         // Convex period (curve down).
         r=request_dcc_convex(tr,timestamp);
         return r;
@@ -623,7 +623,7 @@ struct result request_dcc_convex(struct traject tr, double t){
     double tt=tr.Ttot-th-t;
     double s=vh*tt + tr.Ds*(tt*tt)/2 - jm*(tt*tt*tt)/6;
 
-    r.s=tr.s_acc+tr.s_steady+(tr.s_dcc_convex-s);
+    r.s=tr.s_acc+tr.s_steady+(tr.s_dcc-(tr.s_dcc_concave+s));
     r.v=vh + tr.Ds*tt - jm*(tt*tt)/2;
     r.a=(tr.Ds-jm*tt)*-1;
     r.j=jm*-1;
