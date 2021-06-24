@@ -69,8 +69,12 @@ Return values at a certain time_stamp (seconds):
 ```
 
 Implementation tip:
-If you perform a scurve request with scurve.time-stamp=0. You get the hal pin value for: r_trajecttime (scurve traject time).
-Then your "scurve.time-stamp" request can be done for the period : 0 >= scurve.time-stamp <= r_trajecttime 
+If you perform a scurve request with scurve.time-stamp=0. 
+You get the hal pin value for: r_trajecttime (scurve traject time).
+Then your "scurve.time-stamp" request can be done for the period : 
+```
+	0 >= scurve.time-stamp <= r_trajecttime
+```
 
 Running in demo-mode, "setp scurve.demo-mode 1"
 
