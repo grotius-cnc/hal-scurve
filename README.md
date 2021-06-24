@@ -1,5 +1,7 @@
 
-https://user-images.githubusercontent.com/44880102/123087762-e6a43680-d3f2-11eb-97cc-93e4feb01c51.mp4
+
+
+![hal_oscilloscope](https://user-images.githubusercontent.com/44880102/123252140-f6d31900-d4b9-11eb-944d-afdf03cd37e4.jpg)
 
 # hal-scurve
 hal scurve motion implementation
@@ -70,7 +72,5 @@ Implementation tip:
 If you perform a scurve request with scurve.time-stamp=0. You get the hal pin value for: r_trajecttime (scurve traject time).
 Then your "scurve.time-stamp" request can be done for the period : 0 >= scurve.time-stamp <= r_trajecttime 
 
-
-
-
+https://user-images.githubusercontent.com/44880102/123252114-efac0b00-d4b9-11eb-869e-65afacd5e228.mp4
 
