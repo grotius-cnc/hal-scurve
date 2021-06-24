@@ -76,7 +76,3 @@ Then your "scurve.time-stamp" request can be done for the period :
 	0 >= scurve.time-stamp <= r_trajecttime
 ```
 
-Running in demo-mode, "setp scurve.demo-mode 1"
-
-https://user-images.githubusercontent.com/44880102/123252114-efac0b00-d4b9-11eb-869e-65afacd5e228.mp4
-
